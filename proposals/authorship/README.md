@@ -39,12 +39,12 @@ This is namespaced so that you can have multiples of such records, but for brevi
 def Mesh "Bunny" (
     prepend apiSchemas = ["AuthorshipAPI:hunyuan3d"]
 ) {
-    uniform string authorship:hunyuan3d:producer = "net.trellis3d.hunyuan3d"
-    uniform string authorship:hunyuan3d:producerVersion = "2.1"
+    uniform string authorship:hunyuan3d:softwarePackage = "net.trellis3d.hunyuan3d"
+    uniform string authorship:hunyuan3d:softwareVersion = "2.1"
     uniform string authorship:hunyuan3d:digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia"
-    uniform string[] authorship:hunyuan3d:attribution = ["Trellis Hunyuan 3D", "John Doe"]
-    uniform string[] authorship:hunyuan3d:inputNames = ["prompt", "image", "seed"]
-    uniform string[] authorship:hunyuan3d:inputValues = ["A fluffy bunny", "./refs/bunny_front.png", "1234567"]
+    uniform string[] authorship:hunyuan3d:creator = ["Trellis Hunyuan 3D", "John Doe"]
+    uniform string[] authorship:hunyuan3d:prompt:inputNames = ["prompt", "image", "seed"]
+    uniform string[] authorship:hunyuan3d:prompt:inputValues = ["A fluffy bunny", "./refs/bunny_front.png", "1234567"]
     uniform string authorship:hunyuan3d:created = "2025-02-16T12:03:17+01:00"
     uniform string authorship:hunyuan3d:instanceID = "6530a534-ca8f-487c-8968-0fecd8e717a6"
     uniform string authorship:hunyuan3d:usageTerms = "CC-BY-SA-4.0"
@@ -57,7 +57,7 @@ a record covers a single authoring step and why the input values above are plain
 than asset paths.
 
 **Note:** We have had early conversations with John McCarten, who you will know from
-the RMTC group at the [Academy Software Foundation (ASWF)](https://www.aswf.io). While there
+the Review & Media Transformation Committee (RMTC) at the [Academy Software Foundation (ASWF)](https://www.aswf.io). While there
 is overlap in the problems both efforts are concerned with, we believe the two approaches are
 harmonious rather than competing.
 
@@ -172,7 +172,7 @@ overlaps heavily with the tamper-resistance work we have explicitly left out of 
 It is also much harder to guarantee since our data is inherently synthetic.
 
 **Authorship** is simpler and more direct. It answers the question "who or what made this?"
-at the moment it was made. That is what matters for attribution and most
+at the moment it was made. That is what matters for creator and most
 regulatory requirements. It is also a term that artists, studios, and tool vendors will
 find intuitive, regardless of whether they are working in a legal or archival context.
 
@@ -185,7 +185,7 @@ Ownership and Authorship are often conflated terms, but have a significant legal
 For example, an artist at a studio may be the author but not the owner of the content.
 
 Because the two really are distinct, we give ownership its own place to be stated rather than
-leaving it to be guessed at from `attribution`. [`copyrightOwner`](#copyrightowner-optional) names the
+leaving it to be guessed at from `creator`. [`copyrightOwner`](#copyrightowner-optional) names the
 entity holding copyright, so an artist can be credited as the author while the studio is recorded as
 the owner, in the same record.
 
@@ -210,13 +210,13 @@ of ownership is conveyed properly.
   records (its own plus its ancestors'), and it propagates downward. It is not itself a stored
   field. Keeping "record" (stored) distinct from "designation" (derived) matters when reasoning
   about inheritance and propagation.
-- **Producer**: The specific tool or model most directly responsible for creating
-  a given prim or asset. This is normally a tool, not a person; the person goes in `attribution`
+- **Software package**: The specific tool or model most directly responsible for creating
+  a given prim or asset. This is normally a tool, not a person; the person goes in `creator`
   (the exception being someone hand-authoring the files directly).
   More on how to pick this in the [Details](#details) section.
-- **Attribution**: Human-readable credit for the people and organizations involved in an authoring
-  step, recorded in `attribution`. Distinct from `producer`, which names the tool; see
-  [`attribution`](#attribution-optional).
+- **Creator**: Human-readable credit for the people and organizations involved in an authoring
+  step, recorded in `creator`. Distinct from `softwarePackage`, which names the tool; see
+  [`creator`](#creator-optional).
 - **Copyright owner**: The entity holding copyright in the content, recorded in
   `copyrightOwner`. Often not the author, as with work made for hire. See
   [Authorship is not Ownership](#authorship-is-not-ownership).
@@ -277,12 +277,12 @@ For example, the mesh from the [Summary](#summary) would instead look like this:
 def Mesh "Bunny" (
     prepend apiSchemas = ["PreliminaryAuthorshipAPI:hunyuan3d"]
 ) {
-    uniform string preliminaryAuthorship:hunyuan3d:producer = "net.trellis3d.hunyuan3d"
-    uniform string preliminaryAuthorship:hunyuan3d:producerVersion = "2.1"
+    uniform string preliminaryAuthorship:hunyuan3d:softwarePackage = "net.trellis3d.hunyuan3d"
+    uniform string preliminaryAuthorship:hunyuan3d:softwareVersion = "2.1"
     uniform string preliminaryAuthorship:hunyuan3d:digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia"
-    uniform string[] preliminaryAuthorship:hunyuan3d:attribution = ["Trellis Hunyuan 3D", "John Doe"]
-    uniform string[] preliminaryAuthorship:hunyuan3d:inputNames = ["prompt", "image", "seed"]
-    uniform string[] preliminaryAuthorship:hunyuan3d:inputValues = ["A fluffy bunny", "./refs/bunny_front.png", "1234567"]
+    uniform string[] preliminaryAuthorship:hunyuan3d:creator = ["Trellis Hunyuan 3D", "John Doe"]
+    uniform string[] preliminaryAuthorship:hunyuan3d:prompt:inputNames = ["prompt", "image", "seed"]
+    uniform string[] preliminaryAuthorship:hunyuan3d:prompt:inputValues = ["A fluffy bunny", "./refs/bunny_front.png", "1234567"]
     uniform string preliminaryAuthorship:hunyuan3d:created = "2025-02-16T12:03:17+01:00"
     uniform string preliminaryAuthorship:hunyuan3d:instanceID = "6530a534-ca8f-487c-8968-0fecd8e717a6"
     uniform string preliminaryAuthorship:hunyuan3d:usageTerms = "CC-BY-SA-4.0"
@@ -324,15 +324,15 @@ shows the mapping:
 | AuthorshipAPI field | Equivalent in other standards                                             | Notes                                                                                                                                                                                                                                                                                                                       |
 | ------------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `digitalSourceType` | `Iptc4xmpExt:DigitalSourceType`                                           | Direct match. We use the same IPTC vocabulary.                                                                                                                                                                                                                                                                              |
-| `attribution`       | `dc:creator`                                                              | Same meaning as `dc:creator`, the entity primarily responsible for the resource. We renamed it because "creator" sitting next to `producer` invited exactly the confusion we were trying to remove.                                                                                                                          |
+| `creator`           | `dc:creator`                                                              | Direct match to `dc:creator`, the entity primarily responsible for the resource.                                                                                                                                                                                                                                            |
 | `created`           | `xmp:CreateDate`                                                          | Direct match. An ISO 8601 timestamp.                                                                                                                                                                                                                                                                                        |
 | `instanceID`        | `xmpMM:InstanceID`                                                        | Name borrowed but with a broader meaning: XMP's `InstanceID` identifies one rendition of one resource, while ours identifies one authoring step's output and may span several prims. This is somewhat of an analogy, but not exactly the same (see [`instanceID`](#instanceid-maybe-required)). XMP's `DocumentID`, which stays stable across edits, is intentionally not adopted.                                                                                                                        |
 | `usageTerms`        | `xmpRights:UsageTerms`                                                    | Direct match. The license or usage terms asserted by whoever wrote the record. Note that this does not establish that the author held the right to grant them; see [Authorship is not Ownership](#authorship-is-not-ownership).                                                                                               |
 | `copyrightOwner`    | `xmpRights:Owner`, `Iptc4xmpExt:CopyrightOwner`                           | Direct match to XMP's owner array. IPTC models each owner as a structure with both a name and an identifier; we take names only, since an identifier can be written into the string where one is needed. We do not adopt `dc:rights`, a formatted notice that can be composed from `copyrightOwner` and `created`, nor `xmpRights:Marked`, whose absent case is too easily misread as a public domain declaration.   |
-| `producer`          | `softwareAgent`, `Iptc4xmpExt:AISystemUsed`                          | Close, but not an exact match. C2PA's `softwareAgent`, which appears on actions and in claim generator info, is the nearest equivalent and ties a tool to a specific action in a chain; note it is a structured object there rather than a bare string. IPTC's `AISystemUsed` is specific to AI. Our `producer` names the tool or system most responsible for the prim, without assuming that entity is AI. Note this is *not* equivalent to PDF's `Producer`, which is the application that converted a document to PDF. |
-| `producerVersion`   | `softwareAgent` / `c2pa.ai-disclosure`, `Iptc4xmpExt:AISystemVersionUsed` | C2PA records tool and model version against an action (in the `softwareAgent` object) or through its `c2pa.ai-disclosure` assertion, and IPTC has `AISystemVersionUsed`. We keep it as a simple field sitting next to `producer`, and named after it.                                                                                     |
+| `softwarePackage`   | `softwareAgent`, `Iptc4xmpExt:AISystemUsed`                          | Close, but not an exact match. C2PA's `softwareAgent`, which appears on actions and in claim generator info, is the nearest equivalent and ties a tool to a specific action in a chain; note it is a structured object there rather than a bare string. IPTC's `AISystemUsed` is specific to AI. Our `softwarePackage` names the tool or system most responsible for the prim, without assuming that entity is AI. Note this is *not* equivalent to PDF's `Producer`, which is the application that converted a document to PDF. |
+| `softwareVersion`   | `softwareAgent` / `c2pa.ai-disclosure`, `Iptc4xmpExt:AISystemVersionUsed` | C2PA records tool and model version against an action (in the `softwareAgent` object) or through its `c2pa.ai-disclosure` assertion, and IPTC has `AISystemVersionUsed`. We keep it as a simple field sitting next to `softwarePackage`, and named after it.                                                                                     |
 | `description`       | `dc:description`                                                | Matches the Dublin Core description field, which IPTC also delegates to. C2PA keeps freeform fields like this to a minimum since they can't be verified, which makes sense for a tamper-evident standard. We include it because this schema is about description rather than verification.                                                                    |
-| `inputNames` / `inputValues` | `Iptc4xmpExt:AIPromptInformation`, C2PA `inputTo` / ingredients, `c2pa.ai-disclosure` | A `prompt` entry corresponds to IPTC's AI prompt field. The rest of what shaped a generation (reference images, seeds, sampler settings) is modeled far more richly elsewhere: C2PA relates ingredients and inputs to the result they contributed to via the `inputTo` relationship, and records model detail through `c2pa.ai-disclosure`. All of those standards use real maps or structured objects, which no USD attribute can be, so paired arrays are our approximation rather than an equivalent. |
+| `prompt:inputNames` / `prompt:inputValues` | `Iptc4xmpExt:AIPromptInformation`, C2PA `inputTo` / ingredients, `c2pa.ai-disclosure` | These fields model the prompts and inputs that shaped a generation. A `prompt` entry corresponds to IPTC's AI prompt field. The rest of what shaped a generation (reference images, seeds, sampler settings) is modeled far more richly elsewhere: C2PA relates ingredients and inputs to the result they contributed to via the `inputTo` relationship, and records model detail through `c2pa.ai-disclosure`. All of those standards use real maps or structured objects, which no USD attribute can be, so paired arrays in a sub-namespace are our approximation rather than an equivalent. |
 | `contact`           | _(no equivalent)_                                                         | No equivalent in these standards. Retained for practical support and licensing inquiries.                                                                                                                                                                                                                                   |
 
 ## Identifiers
@@ -340,13 +340,13 @@ shows the mapping:
 A couple of these fields are identifiers, so it is worth saying up front how we suggest
 filling them in.
 
-For `producer`, we recommend reverse domain *style* notation; this is the same convention as Apple
+For `softwarePackage`, we recommend reverse domain *style* notation; this is the same convention as Apple
 bundle identifiers or Java packages (for example `net.trellis3d.hunyuan3d` or `org.blender`).
 Reversed domains are a convenient source of names that are unlikely to collide, without anyone
 needing to run a registry.
 
 An actual registered domain is not required but is encouraged for intuitive traversal. The
-convention is about shape, not ownership. `com.my_name.app` is a perfectly acceptable `producer`,
+convention is about shape, not ownership. `com.my_name.app` is a perfectly acceptable `softwarePackage`,
 which is how Apple bundle identifiers and the OpenUSD profiles scheme are commonly used in
 practice too. The full rules:
 
@@ -354,14 +354,14 @@ practice too. The full rules:
   ownership. There is no network step here by design.
 - **No TLD restriction.** The leading component does not have to be a real top-level domain.
 - **Compare case-insensitively.** We recommend authoring in lowercase, and readers should compare
-  case-insensitively so that `Org.Blender` and `org.blender` are not mistaken for two producers.
-- **Do not reject unfamiliar values.** A `producer` that looks nothing like a domain is still a
+  case-insensitively so that `Org.Blender` and `org.blender` are not mistaken for two softwarePackages.
+- **Do not reject unfamiliar values.** A `softwarePackage` that looks nothing like a domain is still a
   valid record. Tools must not discard, downgrade, or flag a record on that basis.
 
-The [`producer`](#producer-required) field below goes into more detail.
+The [`softwarePackage`](#softwarePackage-required) field below goes into more detail.
 
 For `instanceID`, we recommend a UUID4. It is unique enough for any practical purpose and gives
-away nothing about the author. This identifies a producer's individual *output*, not a prim, and it
+away nothing about the author. This identifies a softwarePackage's individual *output*, not a prim, and it
 makes no uniqueness claim against other identifier systems; see
 [`instanceID`](#instanceid-maybe-required).
 
@@ -372,7 +372,7 @@ them without standing up infrastructure first.
 
 [W3C Decentralized Identifiers (DIDs)](https://www.w3.org/TR/did-core/) come up as an option for
 a stronger, verifiable notion of identity. A DID is an identifier that resolves to identity
-information through a *DID method*, and because `producer` and `attribution` are just strings, a DID
+information through a *DID method*, and because `softwarePackage` and `creator` are just strings, a DID
 like `did:web:trellis3d.net` is a valid value for either. A DID can stand in for `instanceID` too
 if you want that identifier to be resolvable rather than an opaque UUID.
 
@@ -390,7 +390,7 @@ open for now.
 ## Authorship Metadata Fields
 
 Before getting into how to store this data, here are the fields we propose.
-Of these, only `producer` and `producerVersion` are required if the schema is applied at all
+Of these, only `softwarePackage` and `softwareVersion` are required if the schema is applied at all
 (`instanceID` may also be required if a dictionary-based storage form is used, where it
 serves as the key; see [`instanceID`](#instanceid-maybe-required)).
 We strongly encourage `digitalSourceType` as well, as it is the most useful field for
@@ -407,19 +407,19 @@ We also do not record order of operations, as this is not meant to be an ordered
 We leave the room open for future additions like this, but it is deemed out of scope for this proposal.
 
 
-### `producer` (required)
+### `softwarePackage` (required)
 
 An identifier for the tool or system that wrote the USD data for this prim.
 This is always a tool, not a person, unless they were hand-authoring the files. If Jane modeled something in Blender,
-the producer is `org.blender` because Blender is what generated the USD.
-Jane goes in `attribution`. However, if Jane authors the file manually in a text editor, or via API, they would use a domain specific to themselves as in the examples below.
+the softwarePackage is `org.blender` because Blender is what generated the USD.
+Jane goes in `creator`. However, if Jane authors the file manually in a text editor, or via API, they would use a domain specific to themselves as in the examples below.
 
 The key word is _most directly_. If a generative AI model runs inside a DCC tool,
-the producer should be the generative AI model, not the DCC tool. The DCC tool may
+the softwarePackage should be the generative AI model, not the DCC tool. The DCC tool may
 be recorded separately as its own `AuthorshipAPI` instance (see the
 [multi-step pipeline example](#multi-step-ai-pipeline)).
 
-Producer identifiers should use reverse domain style notation where possible. See the [Identifiers](#identifiers) section above.
+Software package identifiers should use reverse domain style notation where possible. See the [Identifiers](#identifiers) section above.
 
 ```
 net.trellis3d.hunyuan3d
@@ -428,7 +428,7 @@ com.artstation.<username>
 com.my_name.mytool
 ```
 
-This helps prevent conflicts between producer names in general, and GenAI model names in
+This helps prevent conflicts between softwarePackage names in general, and GenAI model names in
 particular, where multiple providers may host the same model with their own customizations.
 Reversing the domain puts the most specific
 part last, so you can also namespace within your own tools cleanly
@@ -437,20 +437,20 @@ part last, so you can also namespace within your own tools cleanly
 Note that the instance name in `AuthorshipAPI:hunyuan3d` is just a short namespace
 handle to avoid field collisions on the prim. The same model could be hosted by
 multiple providers, or two vendors could pick the same short name.
-The `producer` field is what tools should actually read to identify the producer.
+The `softwarePackage` field is what tools should actually read to identify the softwarePackage.
 
-### `producerVersion` (required)
+### `softwareVersion` (required)
 
-A string identifying the version of the `producer` that created this prim. It versions the
-producer, not the prim, the asset, or the authorship record.
+A string identifying the version of the `softwarePackage` that created this prim. It versions the
+softwarePackage, not the prim, the asset, or the authorship record.
 
-Together, `producer` and `producerVersion` identify the specific tool or model that authored the prim.
-For example, `net.trellis3d.hunyuan3d` at version `2.1`. This is important, since multiple versions of the same producer could generate very different results.
+Together, `softwarePackage` and `softwareVersion` identify the specific tool or model that authored the prim.
+For example, `net.trellis3d.hunyuan3d` at version `2.1`. This is important, since multiple versions of the same softwarePackage could generate very different results.
 
 Some hosted models don't expose a stable version, or quietly swap the deployed model out from
 under you without bumping a version string. In those cases, record whatever the service does
 give you (a snapshot label, a build hash, an API version) and lean on `created` (the date of the
-run) to pin down which iteration of the model was used. A `producerVersion` of `unknown` next to a
+run) to pin down which iteration of the model was used. A `softwareVersion` of `unknown` next to a
 populated `created` is better than no record at all.
 
 ### `digitalSourceType` (strongly encouraged)
@@ -487,7 +487,7 @@ For example, if a parent prim has an AI designation
 but a child is authored without that, the child can still be conservatively
 considered AI-designated even if its own content is human (see
 [Hierarchy and Inheritance](#hierarchy-and-inheritance)). This is a claim about the derived AI
-*designation*, not the stored *records*, which stay distinct so attribution can still show the
+*designation*, not the stored *records*, which stay distinct so creator can still show the
 prim as human work sitting within an AI-generated context. 
 
 We deem this inference the safest to comply with regulations, while still preserving intent. 
@@ -503,11 +503,11 @@ XMP's `InstanceID` identifies one specific rendition of one resource, whereas
 ours identifies one authoring step's output, which may span several prims. 
 Therefore you must be careful not to treat these standards as equivalent when round-tripping.
 
-This is different from `producerVersion`.
+This is different from `softwareVersion`.
 
-- `producerVersion` identifies the version of the producer of this content. For example, version `2.1` of `net.trellis3d.hunyuan3d` algorithm.
+- `softwareVersion` identifies the version of the softwarePackage of this content. For example, version `2.1` of `net.trellis3d.hunyuan3d` algorithm.
 - `instanceID` instead identifies this run's output, meaning the specific result that came out of that
-  producer this time. Each iteration of the same model would result in a unique
+  softwarePackage this time. Each iteration of the same model would result in a unique
   `instanceID`.
 
 This is useful for generative AI tools (where the same prompt run twice produces
@@ -529,7 +529,7 @@ time is provenance-over-time, which this proposal scopes out (see [Non-Goals](#n
 `instanceID` records the output of one authoring step, not a lineage that persists through later
 changes.
 
-**Important:** this identifier refers to this particular output from the producer, but does not
+**Important:** this identifier refers to this particular output from the softwarePackage, but does not
 guarantee a reproducible recipe. A subsequent run of the same AI model with the same inputs
 may not produce the same results, as models may introduce their own internal variance. Do not use `instanceID` to imply that the asset
 can be regenerated identically.
@@ -541,24 +541,23 @@ is not. Your social security number is certainly not.
 While this identifier is optional, it may be required if we take the form of asset dictionaries where the identifier is the key.
 
 
-### `attribution` (optional)
+### `creator` (optional)
 
-A list of human-friendly attribution strings. This might include the name of the tool
+A list of human-friendly creator strings. This might include the name of the tool
 or service, the name of an individual artist, or a studio name. This is intended for
-display purposes. This corresponds to `dc:creator` in the Dublin Core / C2PA vocabulary,
-which we have renamed here so that it does not read as a competing answer to `producer`.
+display purposes. This corresponds to `dc:creator` in the Dublin Core / C2PA vocabulary.
 
 ### `description` (optional)
 
 A free-form description of how the prim was created. For AI-generated content,
-`inputNames` / `inputValues` are preferred for recording the prompt and other
+`prompt:inputNames` / `prompt:inputValues` are preferred for recording the prompt and other
 generation inputs. This field
 is better suited for technique notes, reference material, asset history, or other freeform context.
 This might also be useful for things like museum assets where we can include the history
 of how the asset was acquired. It is technically an unbounded string. We leave editorial
 restraint as an exercise for the author.
 
-### `inputNames` and `inputValues` (optional)
+### `prompt:inputNames` and `prompt:inputValues` (optional)
 
 The inputs that shaped this authoring step: the prompt, any reference material, and whatever
 settings materially influenced the result. Specific to generative and algorithmic content.
@@ -566,10 +565,10 @@ settings materially influenced the result. Specific to generative and algorithmi
 These are two index-matched arrays as USD does not allow dictionary attributes:
 
 ```python
-uniform string[] authorship:hunyuan3d:inputNames = [
+uniform string[] authorship:hunyuan3d:prompt:inputNames = [
     "prompt", "negativePrompt", "image", "seed", "guidance"
 ]
-uniform string[] authorship:hunyuan3d:inputValues = [
+uniform string[] authorship:hunyuan3d:prompt:inputValues = [
     "A fluffy bunny", "low poly", "./refs/bunny_front.png", "1234567", "7.5"
 ]
 ```
@@ -606,11 +605,11 @@ If no `usageTerms` is provided, no specific license should be assumed.
 
 ### `copyrightOwner` (optional)
 
-The entity or entities holding copyright in this content, which may differ from the `attribution`. 
+The entity or entities holding copyright in this content, which may differ from the `creator`. 
 It is a list because there may be multiple owners.
 
 ```python
-uniform string[] authorship:jane:attribution = ["Jane Doe"]
+uniform string[] authorship:jane:creator = ["Jane Doe"]
 uniform string[] authorship:jane:copyrightOwner = ["Acme Studios LLC"]
 ```
 
@@ -660,16 +659,18 @@ We looked at a few options before landing here:
 
   ```python
   over "Bunny" (
-      authorship = {
-          dictionary hunyuan3d = {
-              string producer = "net.trellis3d.hunyuan3d"
-              string producerVersion = "2.1"
-              string digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia"
-          }
-          dictionary blender = {
-              string producer = "org.blender"
-              string producerVersion = "4.2"
-              string digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/digitalCreation"
+      assetInfo = {
+          dictionary authorship = {
+              dictionary hunyuan3d = {
+                  string softwarePackage = "net.trellis3d.hunyuan3d"
+                  string softwareVersion = "2.1"
+                  string digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia"
+              }
+              dictionary blender = {
+                  string softwarePackage = "org.blender"
+                  string softwareVersion = "4.2"
+                  string digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/digitalCreation"
+              }
           }
       }
   )
@@ -680,10 +681,12 @@ We looked at a few options before landing here:
 
   ```python
   over "Bunny" (
-      authorship = {
-          dictionary "6530a534-ca8f-487c-8968-0fecd8e717a6" = {
-              string producer = "net.trellis3d.hunyuan3d"
-              string producerVersion = "2.1"
+      assetInfo = {
+          dictionary authorship = {
+              dictionary "6530a534-ca8f-487c-8968-0fecd8e717a6" = {
+                  string softwarePackage = "net.trellis3d.hunyuan3d"
+                  string softwareVersion = "2.1"
+              }
           }
       }
   )
@@ -718,11 +721,26 @@ We are open to a dictionary-based alternative if there is strong community prefe
 as long as the format is standardized. The important thing from our perspective is that everyone is reading
 and writing the same fields on prims.
 
+### Why Uniform?
+
+The properties in `AuthorshipAPI` are all marked as `uniform`. We made this decision because
+we consider creation a record of a one time event. While it may contribute to specific time ranges,
+the authorship record granularity applies to the prim as a whole.
+
+If a record wants to further clarify its role, it can do so in its description or input attributes.
+Regulation language seems to align around distinct objects, whereas singular attributes can not be perceived
+as such without combining with a prim level collection of data.
+
 
 ### Where the Schema Should Live
 
 Authorship can be placed on any prim, so it needs to live in a library that is not highly
 domain-specific; `UsdGeom` is a poor fit given this applies equally to `UsdShade` and others.
+
+**The Authorship Record should live on the prim.** Even when the authorship describes time-sampled data,
+the schema should be applied to the prim hosting those samples, not to the individual attributes.
+Authorship is a property of the object's creation, and USD's prim-based API schemas are the
+natural home for it.
 
 **We recommend `usdMedia`.** It already hosts `AssetPreviewsAPI`, which is likewise applied to any
 prim to record descriptive metadata about an asset, so authorship sits naturally alongside it. 
@@ -774,18 +792,18 @@ dropped or merged by `UsdStage::Flatten()` entirely (see
 one of the reasons we recommend against it.
 
 **Index-matched arrays.** One field pair in this proposal has a related but distinct failure mode.
-[`inputNames` and `inputValues`](#inputnames-and-inputvalues-optional)
+[`prompt:inputNames` and `prompt:inputValues`](#promptinputnames-and-promptinputvalues-optional)
 are paired by index, and being separate attributes, a stronger opinion can override one without the
 other. Nothing is shadowed exactly, but the surviving pairing is wrong, and USD has no way to
 detect it. Authoring both arrays together in one layer avoids creating the situation, and readers
 should treat a length mismatch as a malformed record rather than displaying a mispaired guess.
 
-### Choosing a Producer
+### Choosing a Software Package
 
-The `producer` field should name the most proximate creator of the prim.
+The `softwarePackage` field should name the most proximate creator of the prim.
 
 If a generative AI model runs inside Blender, you would list the AI model as the
-producer for its authorship record. Blender might be listed as the producer for a
+softwarePackage for its authorship record. Blender might be listed as the softwarePackage for a
 separate `AuthorshipAPI` instance representing the step where a human used Blender
 to review or modify the result. These are distinct steps in the pipeline and deserve
 distinct records.
@@ -794,10 +812,10 @@ A few practical guidelines:
 
 - A plugin should attribute the underlying algorithm, not the host application,
   unless the host application itself is creating the content.
-- A studio pipeline step (e.g. a procedural rigging tool) is itself a valid producer
+- A studio pipeline step (e.g. a procedural rigging tool) is itself a valid softwarePackage
   even if it is not a commercial product.
-- A human artist is usually not a `producer`. The tool they used to generate the USD is, unless they literally manually wrote the USD (power to them if they're writing whole assets manually).
-  The human usually goes in `attribution`.
+- A human artist is usually not a `softwarePackage`. The tool they used to generate the USD is, unless they literally manually wrote the USD (power to them if they're writing whole assets manually).
+  The human usually goes in `creator`.
 
 **Instance name collisions.** If the same DCC is used to author multiple layers that
 will be composed together on the same prim (for example, a geometry layer and a shading
@@ -823,7 +841,7 @@ In an attempt to remove ambiguity, I've tried to include some clarifying stateme
   this still feels like an intuitive term to use, and one I think we already use successfully in many contexts.
 - **Records accumulate as a set, and source types propagate downward.** Walking up
   the hierarchy yields a *set* of records, each keeping its own `digitalSourceType` and
-  other fields. For attribution and display, keep them distinct: a hand-modeled child under
+  other fields. For creator and display, keep them distinct: a hand-modeled child under
   an AI-authored ancestor carries both records (`[ancestor: AI, self: human]`), and a tool
   should surface that mix rather than flattening it into a single label. We treat authorship records as hierarchy markers that "color" the hierarchy below them.
   This means that if a parent is AI-generated, its children inherit this coloring even if they specify otherwise.
@@ -870,8 +888,8 @@ This should therefore (by default) satisfy many of the regulatory concerns, wher
 def Xform "RockLarge" (
     prepend apiSchemas = ["AuthorshipAPI:rockmaker"]
 ) {
-    uniform string authorship:rockmaker:producer = "com.example.rocktool"
-    uniform string authorship:rockmaker:producerVersion = "3.0"
+    uniform string authorship:rockmaker:softwarePackage = "com.example.rocktool"
+    uniform string authorship:rockmaker:softwareVersion = "3.0"
     uniform string authorship:rockmaker:digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia"
 
     def Mesh "Geom" {}
@@ -885,8 +903,8 @@ def Xform "RockLarge" (
 def "World" (
     prepend apiSchemas = ["AuthorshipAPI:layout"]
 ) {
-    uniform string authorship:layout:producer = "com.example.layouttool"
-    uniform string authorship:layout:producerVersion = "1.0"
+    uniform string authorship:layout:softwarePackage = "com.example.layouttool"
+    uniform string authorship:layout:softwareVersion = "1.0"
     uniform string authorship:layout:digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/digitalCreation"
 
     def "Rock_1" (references = @rock_asset.usd@) {}
@@ -928,8 +946,8 @@ reparenting in general). Consider these examples adapted from Matt:
 def Xform "terrain" (
     prepend apiSchemas = ["AuthorshipAPI:terrain"]
 ) {
-    uniform string authorship:terrain:producer = "com.example.terraintool"
-    uniform string authorship:terrain:producerVersion = "1.0"
+    uniform string authorship:terrain:softwarePackage = "com.example.terraintool"
+    uniform string authorship:terrain:softwareVersion = "1.0"
 
     def Xform "rock" {}   # no authorship of its own; relies on inheriting from `terrain`
 }
@@ -945,8 +963,8 @@ def Xform "terrain" (
 def Xform "rockslide" (
     prepend apiSchemas = ["AuthorshipAPI:rockslide"]
 ) {
-    uniform string authorship:rockslide:producer = "com.example.rockslidetool"
-    uniform string authorship:rockslide:producerVersion = "1.0"
+    uniform string authorship:rockslide:softwarePackage = "com.example.rockslidetool"
+    uniform string authorship:rockslide:softwareVersion = "1.0"
 }
 
 def Xform "terrain" (references = @./terrain.usda@) {}
@@ -955,7 +973,7 @@ def Xform "terrain" (references = @./terrain.usda@) {}
 The `rock` prim carried no record of its own and relied on inheriting from its namespace
 parent `terrain`. The `relocates` moves `rock` out from under `terrain` and under
 `rockslide`, so by the inheritance convention it now inherits the `rockslide` record
-instead of the `terrain` one. The original attribution is silently swapped for a
+instead of the `terrain` one. The original creator is silently swapped for a
 different one, and this survives into a flattened result.
 
 While this is also a legitimate case one might run into, I do think this is rare and has the same caveats as referencing above.
@@ -969,7 +987,7 @@ in a corner of the ecosystem that is already handling composition with care.
 boundary from a shared prototype, so authorship authored *inside* a prototype is shared across
 every instance and cannot vary per instance. Authorship on the instanceable prim itself (the
 instance root) is a normal per-prim opinion and behaves as expected; it is only below the
-instance boundary that per-instance attribution is not expressible. `UsdGeomPointInstancer` is
+instance boundary that per-instance creator is not expressible. `UsdGeomPointInstancer` is
 more extreme: its instances are not prims at all but encoded in arrays, so authorship can only
 live on the `PointInstancer` prim or on its prototype prims, not on an individual point
 instance. We think this is acceptable, as instanced content generally shares an origin, so
@@ -1037,12 +1055,12 @@ A mesh generated by a single generative AI tool, from a prompt plus a reference 
 def Mesh "Bunny" (
     prepend apiSchemas = ["AuthorshipAPI:hunyuan3d"]
 ) {
-    uniform string authorship:hunyuan3d:producer = "net.trellis3d.hunyuan3d"
-    uniform string authorship:hunyuan3d:producerVersion = "2.1"
+    uniform string authorship:hunyuan3d:softwarePackage = "net.trellis3d.hunyuan3d"
+    uniform string authorship:hunyuan3d:softwareVersion = "2.1"
     uniform string authorship:hunyuan3d:digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia"
-    uniform string[] authorship:hunyuan3d:attribution = ["Trellis Hunyuan 3D", "John Doe"]
-    uniform string[] authorship:hunyuan3d:inputNames = ["prompt", "image", "seed"]
-    uniform string[] authorship:hunyuan3d:inputValues = ["A fluffy bunny", "./refs/bunny_front.png", "1234567"]
+    uniform string[] authorship:hunyuan3d:creator = ["Trellis Hunyuan 3D", "John Doe"]
+    uniform string[] authorship:hunyuan3d:prompt:inputNames = ["prompt", "image", "seed"]
+    uniform string[] authorship:hunyuan3d:prompt:inputValues = ["A fluffy bunny", "./refs/bunny_front.png", "1234567"]
     uniform string authorship:hunyuan3d:created = "2025-02-16T12:03:17+01:00"
     uniform string authorship:hunyuan3d:instanceID = "6530a534-ca8f-487c-8968-0fecd8e717a6"
     uniform string authorship:hunyuan3d:usageTerms = "CC-BY-SA-4.0"
@@ -1054,7 +1072,7 @@ def Mesh "Bunny" (
 
 A mesh generated by an AI model and then cleaned up inside a DCC tool.
 Each step in the pipeline gets its own `AuthorshipAPI` instance.
-Note that `hunyuan3d` is listed as the producer for the AI step even though Blender
+Note that `hunyuan3d` is listed as the softwarePackage for the AI step even though Blender
 was the host application, because the "creative" work for that step was done by the model.
 
 ```python
@@ -1062,17 +1080,17 @@ def Mesh "Bunny" (
     prepend apiSchemas = ["AuthorshipAPI:hunyuan3d", "AuthorshipAPI:blender"]
 ) {
     # The generative AI model that produced the initial mesh
-    uniform string authorship:hunyuan3d:producer = "net.trellis3d.hunyuan3d"
-    uniform string authorship:hunyuan3d:producerVersion = "2.1"
+    uniform string authorship:hunyuan3d:softwarePackage = "net.trellis3d.hunyuan3d"
+    uniform string authorship:hunyuan3d:softwareVersion = "2.1"
     uniform string authorship:hunyuan3d:digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia"
-    uniform string[] authorship:hunyuan3d:inputNames = ["prompt"]
-    uniform string[] authorship:hunyuan3d:inputValues = ["A fluffy bunny"]
+    uniform string[] authorship:hunyuan3d:prompt:inputNames = ["prompt"]
+    uniform string[] authorship:hunyuan3d:prompt:inputValues = ["A fluffy bunny"]
 
     # A human artist who cleaned up the mesh in Blender afterwards
-    uniform string authorship:blender:producer = "org.blender"
-    uniform string authorship:blender:producerVersion = "4.2"
+    uniform string authorship:blender:softwarePackage = "org.blender"
+    uniform string authorship:blender:softwareVersion = "4.2"
     uniform string authorship:blender:digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/digitalCreation"
-    uniform string[] authorship:blender:attribution = ["Jane Doe"]
+    uniform string[] authorship:blender:creator = ["Jane Doe"]
     uniform string[] authorship:blender:contact = ["jane@example.com"]
 }
 ```
@@ -1080,17 +1098,17 @@ def Mesh "Bunny" (
 ### Human Artist
 
 A prop modeled by a human artist at a studio, where the studio holds copyright and licenses it
-under Creative Commons. Note that `attribution` and `copyrightOwner` name different parties, which is
+under Creative Commons. Note that `creator` and `copyrightOwner` name different parties, which is
 the common case for work made for hire.
 
 ```python
 def Mesh "TeaCup" (
     prepend apiSchemas = ["AuthorshipAPI:jane"]
 ) {
-    uniform string authorship:jane:producer = "org.blender"
-    uniform string authorship:jane:producerVersion = "4.2"
+    uniform string authorship:jane:softwarePackage = "org.blender"
+    uniform string authorship:jane:softwareVersion = "4.2"
     uniform string authorship:jane:digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/digitalCreation"
-    uniform string[] authorship:jane:attribution = ["Jane Doe"]
+    uniform string[] authorship:jane:creator = ["Jane Doe"]
     uniform string[] authorship:jane:copyrightOwner = ["Acme Studios LLC"]
     uniform string authorship:jane:usageTerms = "CC-BY-4.0"
     uniform string[] authorship:jane:contact = ["jane@example.com"]
@@ -1105,48 +1123,94 @@ A prop captured using photogrammetry which is therefore neither human generated 
 def Mesh "ScannedProp" (
     prepend apiSchemas = ["AuthorshipAPI:rcapture"]
 ) {
-    uniform string authorship:rcapture:producer = "com.capturingreality.rcapture"
-    uniform string authorship:rcapture:producerVersion = "1.4"
+    uniform string authorship:rcapture:softwarePackage = "com.capturingreality.rcapture"
+    uniform string authorship:rcapture:softwareVersion = "1.4"
     uniform string authorship:rcapture:digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/algorithmicMedia"
-    uniform string[] authorship:rcapture:attribution = ["Acme Studio"]
+    uniform string[] authorship:rcapture:creator = ["Acme Studio"]
     uniform string authorship:rcapture:created = "2025-06-01T09:00:00+00:00"
 }
 ```
 
-### Mixed Authorship Across a Hierarchy
+### Mixed Authorship in a Dressed Environment
 
-An AI-authored group with a hand-modeled child, illustrating accumulation and the
+A city environment where the layout was generated by an AI tool, but the individual
+elements are a mix of human-authored and AI-generated assets. This illustrates accumulation and the
 downward propagation of the AI designation (see
 [Hierarchy and Inheritance](#hierarchy-and-inheritance)).
 
 ```python
-def Xform "Set" (
-    prepend apiSchemas = ["AuthorshipAPI:worldgen"]
+def Xform "City" (
+    prepend apiSchemas = ["AuthorshipAPI:citygen"]
 ) {
-    # The whole set was laid out by a generative AI tool.
-    uniform string authorship:worldgen:producer = "com.example.worldgen"
-    uniform string authorship:worldgen:producerVersion = "0.9"
-    uniform string authorship:worldgen:digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia"
+    # The layout of the city was generated by an AI tool.
+    uniform string authorship:citygen:softwarePackage = "com.example.citygen"
+    uniform string authorship:citygen:softwareVersion = "2.5"
+    uniform string authorship:citygen:digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia"
+
+    def "House_1" (references = @./assets/human_house.usd@) {
+        # This building is a human-authored asset.
+        # It carries its own AuthorshipAPI:human_modeling record from its source.
+    }
+
+    def Xform "House_2" (
+        prepend apiSchemas = ["AuthorshipAPI:hunyuan3d"]
+    ) {
+        # This building was itself generated by a 3D generative AI model directly in this file.
+        uniform string authorship:hunyuan3d:softwarePackage = "net.trellis3d.hunyuan3d"
+        uniform string authorship:hunyuan3d:softwareVersion = "2.1"
+        uniform string authorship:hunyuan3d:digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia"
+    }
 
     def Mesh "HeroProp" (
         prepend apiSchemas = ["AuthorshipAPI:jane"]
     ) {
-        # A human artist modeled this specific prop by hand.
-        uniform string authorship:jane:producer = "org.blender"
-        uniform string authorship:jane:producerVersion = "4.2"
+        # A human artist modeled this specific prop by hand directly in this file.
+        uniform string authorship:jane:softwarePackage = "org.blender"
+        uniform string authorship:jane:softwareVersion = "4.2"
         uniform string authorship:jane:digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/digitalCreation"
-        uniform string[] authorship:jane:attribution = ["Jane Doe"]
+        uniform string[] authorship:jane:creator = ["Jane Doe"]
     }
 }
 ```
 
-Walking authorship for `/Set/HeroProp` yields the accumulated set as something like
-`[worldgen: AI (inherited), jane: human (own)]`. A tool displaying attribution should show
-both, ideally distinguishing the inherited `worldgen` record from the prim's own `jane`
-record. For AI disclosure, `HeroProp` is conservatively considered to carry the AI
-designation propagated from `Set`, even though its own content is human-authored: it is
-human work sitting within an AI-generated context, not a reason to relabel Jane's mesh as
-AI-generated in the attribution sense.
+Walking authorship for `/City/HeroProp` or `/City/House_1` yields the accumulated set as something like
+`[citygen: AI (inherited), jane: human (own)]`. 
+
+For `/City/House_2`, the tool sees two distinct AI records: one from the layout step (`citygen`) and one from
+ the generation of the building itself (`hunyuan3d`).
+
+For AI disclosure, all three prims are conservatively considered to carry the AI
+designation propagated from `City`. `HeroProp` and `House_1` represent human work sitting within 
+an AI-generated context. `House_2` represents AI work sitting within an AI-generated context.
+A tool displaying creator should show all relevant records, distinguishing the inherited 
+`citygen` record from each prim's own records.
+
+If the referenced asset (`House_1`) was viewed on its own, it would only show its own 
+specific authorship records.
+
+### Poses and Time Samples
+
+A character where the base model was created by a studio, but specific poses or animation
+were generated by an AI tool. The AI record lives on the same prim as the human model
+record, but names the AI tool as the `softwarePackage` for the animation step.
+
+```python
+def "Character" (
+    prepend apiSchemas = ["AuthorshipAPI:studio_base", "AuthorshipAPI:ai_animator"]
+) {
+    # Base model record
+    uniform string authorship:studio_base:softwarePackage = "org.blender"
+    uniform string authorship:studio_base:digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/digitalCreation"
+    uniform string[] authorship:studio_base:creator = ["Acme Studios"]
+
+    # AI Animation record
+    uniform string authorship:ai_animator:softwarePackage = "com.example.anim-ai"
+    uniform string authorship:ai_animator:softwareVersion = "1.0"
+    uniform string authorship:ai_animator:digitalSourceType = "http://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia"
+    uniform string[] authorship:ai_animator:prompt:inputNames = ["style", "action"]
+    uniform string[] authorship:ai_animator:prompt:inputValues = ["heroic", "walk cycle"]
+}
+```
 
 ## Schema Definition
 
@@ -1162,10 +1226,10 @@ class "AuthorshipAPI" (
         token propertyNamespacePrefix = "authorship"
     }
 ) {
-    uniform string producer (
+    uniform string softwarePackage (
         doc = """An identifier for the tool or system that wrote the USD data for this
         prim. This is a tool, not a person, unless someone is hand-authoring the files;
-        people go in attribution. Should name the most direct producer: if a generative
+        people go in creator. Should name the most direct softwarePackage: if a generative
         AI model runs inside a DCC tool, this names the AI model rather than the host.
         Reverse domain style notation is recommended, though a registered domain is not
         required and no validation is expected:
@@ -1173,9 +1237,9 @@ class "AuthorshipAPI" (
         Compare case-insensitively."""
     )
 
-    uniform string producerVersion (
-        doc = """A string identifying the version of the producer named above.
-        Versions the producer, not the prim or the asset. Where a hosted service exposes
+    uniform string softwareVersion (
+        doc = """A string identifying the version of the softwarePackage named above.
+        Versions the softwarePackage, not the prim or the asset. Where a hosted service exposes
         no stable version, record whatever it does give you and rely on created to pin
         down which iteration was used."""
     )
@@ -1191,30 +1255,29 @@ class "AuthorshipAPI" (
         Corresponds to Iptc4xmpExt:DigitalSourceType in the IPTC vocabulary."""
     )
 
-    uniform string[] attribution (
-        doc = """An optional human-friendly list of attribution strings, intended for
+    uniform string[] creator (
+        doc = """An optional human-friendly list of creator strings, intended for
         display. May include the name of a tool or service, an individual artist, or a
-        studio. Corresponds to dc:creator in the Dublin Core / C2PA vocabulary, renamed
-        here to avoid confusion with producer."""
+        studio. Corresponds to dc:creator in the Dublin Core / C2PA vocabulary."""
     )
 
     uniform string description (
         doc = """An optional free-form description of how this prim was created.
-        For AI-generated content, prefer inputNames / inputValues
+        For AI-generated content, prefer prompt:inputNames / prompt:inputValues
         for the prompt and other generation inputs.
         Use this field for technique notes, reference material, or asset history."""
     )
 
-    uniform string[] inputNames (
+    uniform string[] prompt:inputNames (
         doc = """Optional names of the inputs that shaped this authoring step, such as
         prompt, negativePrompt, image, seed or guidance. Index-matched with
-        inputValues: the two must be the same length, and should always be authored
+        prompt:inputValues: the two must be the same length, and should always be authored
         together so that composition cannot pull them out of alignment. Readers should
         treat a length mismatch as a malformed record."""
     )
 
-    uniform string[] inputValues (
-        doc = """Optional values for the inputs named in inputNames, matched by index.
+    uniform string[] prompt:inputValues (
+        doc = """Optional values for the inputs named in prompt:inputNames, matched by index.
         Values are opaque strings, so they need no escaping. Deliberately not
         asset-valued, so that recording a reference image does not imply the source
         file should be resolved or packaged with the asset."""
@@ -1250,7 +1313,7 @@ class "AuthorshipAPI" (
 
     uniform string[] copyrightOwner (
         doc = """Optional list of entities holding copyright in this content, which may
-        differ from attribution. A list, since there may be multiple owners.
+        differ from creator. A list, since there may be multiple owners.
         Corresponds loosely to xmpRights:Owner, and to Iptc4xmpExt:CopyrightOwner (which
         also carries an owner identifier that we do not model separately)."""
     )
@@ -1269,11 +1332,11 @@ which would undermine its usefulness for compliance and interoperability. The be
 mitigation is to keep the schema simple and the barrier to entry low, which we have
 tried to do.
 
-There is also a risk that the `producer` naming convention is not followed consistently,
+There is also a risk that the `softwarePackage` naming convention is not followed consistently,
 making it hard to identify specific tools in practice. We can only encourage best
 practices here, not enforce them.
 
-One smaller risk is worth naming. `inputNames` and `inputValues` are
+One smaller risk is worth naming. `prompt:inputNames` and `prompt:inputValues` are
 index-matched separate attributes, so composition can pull them out of alignment; we discuss the
 mitigations in [When Records Get Shadowed](#when-records-get-shadowed).
 
@@ -1297,7 +1360,7 @@ and scene composition, makes this both more important and more interesting to so
 it is for simpler formats. We think the multiple-apply schema approach handles that
 complexity well.
 
-This work also connects to a broader structural problem: how attribution, ownership, and
+This work also connects to a broader structural problem: how creator, ownership, and
 dissemination rights flow when assets are recombined across vendor and pipeline boundaries.
 A parallel in-flight proposal on IP protection in USD
 ([PR #107](https://github.com/PixarAnimationStudios/OpenUSD-proposals/pull/107)) addresses an
