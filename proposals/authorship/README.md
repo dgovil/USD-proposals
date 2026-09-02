@@ -436,7 +436,8 @@ part last, so you can also namespace within your own tools cleanly
 
 Note that the instance name in `AuthorshipAPI:hunyuan3d` is just a short namespace
 handle to avoid field collisions on the prim. The same model could be hosted by
-multiple providers, or two vendors could pick the same short name.
+multiple providers, or two vendors could pick the same short name. The danger of overriding
+or overwriting records comes in here if different authoring steps choose the same instance name handle.
 The `softwarePackage` field is what tools should actually read to identify the softwarePackage.
 
 ### `softwareVersion` (required)
