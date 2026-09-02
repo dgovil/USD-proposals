@@ -531,9 +531,12 @@ time is provenance-over-time, which this proposal scopes out (see [Non-Goals](#n
 changes.
 
 **Important:** this identifier refers to this particular output from the softwarePackage, but does not
-guarantee a reproducible recipe. A subsequent run of the same AI model with the same inputs
-may not produce the same results, as models may introduce their own internal variance. Do not use `instanceID` to imply that the asset
-can be regenerated identically.
+guarantee a reproducible recipe. Unless a DCC encodes edit history and itself produces identifiers
+that it can backwards-map to that history, it cannot regenerate the asset identically.
+Whether an identifier can be used to identify an asset in a pipeline depends on the pipeline's
+support for that identifier type; for example, a studio using Perforce identifiers might need
+to maintain a map between `instanceID` and Perforce versions if they wish to bridge the two.
+Do not use `instanceID` to imply that the asset can be regenerated identically without such external mapping.
 
 This identifier should not encode information that could identify the author
 outside of the system that created the asset. A UUID4 is good. Your email address
