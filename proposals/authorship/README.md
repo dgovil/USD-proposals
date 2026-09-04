@@ -829,7 +829,7 @@ properties shadowing the other during composition, for example `blender_geo` and
 version, same contributor), it is also acceptable to reuse the same instance name and
 let the properties compose normally as long as it meets regulatory needs.
 
-### Hierarchy and Inheritance
+### Namespace Inheritance and Accumulation
 
 USD's composition model naturally raises the question of what it means for a prim
 to have authorship information when its children do not.
@@ -841,8 +841,9 @@ own records, but it does not erase the records above it.**
 
 In an attempt to remove ambiguity, I've tried to include some clarifying statements here:
 
-- **Inheritance here refers to hierarchical propagation, not class inheritance.** While the name conflict is unfortunate,
-  this still feels like an intuitive term to use, and one I think we already use successfully in many contexts.
+- **We refer to this as Namespace Inheritance.** This distinguishes it from composition
+  inheritance (`inherits`). While the name conflict is unfortunate, this feels like an
+  intuitive term to use, and one we already use successfully in many contexts.
 - **Records accumulate as a set, and source types propagate downward.** Walking up
   the hierarchy yields a *set* of records, each keeping its own `digitalSourceType` and
   other fields. For creator and display, keep them distinct: a hand-modeled child under
@@ -864,14 +865,24 @@ In an attempt to remove ambiguity, I've tried to include some clarifying stateme
   As with several things in USD, some parts are left to the dominion of the creators and pipeline. 
   We just aim to make it as intuitive as possible for the most common cases.
 
-Because inheritance is a display convention rather than authored data, we lightly suggest
+Because this inheritance is a display convention rather than authored data, we lightly suggest
 that tools give explicit and inherited records a distinct treatment of their choosing (a
 different icon, muted styling, a tooltip) so a user can tell what a prim declared for
 itself from what it picked up from its context. The right treatment depends on the
 application, so we do not prescribe one.
 
+**We do not recommend aggregating authorship upwards into "summary" records.** 
+Unlike USD Profiles, where upward aggregation (e.g., in `assetInfo`) provides compelling value 
+for quick lookups, for Authorship it would create an "anti-value". A single AI-generated building 
+in a large human-modeled city layout would cause the aggregate summary for the entire city 
+to identify as AI-generated, which is misleading. Therefore, clients must traverse the 
+hierarchy (either upwards or downwards depending on context) to determine the authorship 
+of the specific prim they care about.
+
 We recommend that OpenUSD provide an API to help with observing this accumulation, but without providing opinions on the data within.
-This could be a convenience API added after the proposal itself lands.
+Such a helper should likely return a "map of sets" that maps ancestor prim-paths to the 
+set of records found at each path. This follows the pattern of "aggregation through inheritance" 
+seen in `UsdSemanticsLabelsAPI`. This could be a convenience API added after the proposal itself lands.
 
 ### Composition Issues to Consider
 
@@ -923,7 +934,8 @@ There is one case to be careful of. Composition pulls a reference *target* and i
 subtree, not the target's *ancestors*. So if you author authorship only on an ancestor
 of the prim you reference (for example on a parent `class`, and then reference one of its
 children directly), that ancestor's record will not travel across the reference, and it
-will not be recoverable after `UsdStage::Flatten()` either.
+will not be recoverable after `UsdStage::Flatten()` either. **Sub-root references are fraught
+for this reason in all contexts—not just this schema.**
 
 We recommend two things to avoid this:
 
